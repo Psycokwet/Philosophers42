@@ -37,7 +37,8 @@ void	print_action(int id, int action_code);
 
 static char	*g_actions_string[MAX_ACTIONS] =
 {
-	ACTION_TEXT_FORK, ACTION_TEXT_EAT, ACTION_TEXT_SLEEP, ACTION_TEXT_THINK, ACTION_TEXT_DEAD
+	ACTION_TEXT_FORK, ACTION_TEXT_EAT, ACTION_TEXT_SLEEP,
+	ACTION_TEXT_THINK, ACTION_TEXT_DEAD
 };
 
 int		ft_atoi(const char *str);
@@ -95,5 +96,7 @@ typedef struct s_philo_env {
 	int			num;
 	pthread_t	th;
 } t_philo_env;
+
+int	try_to_pick_up_fork(t_env *env, int id);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: scarboni <scarboni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/22 18:54:29 by scarboni          #+#    #+#             */
-/*   Updated: 2021/10/03 10:16:10 by scarboni         ###   ########.fr       */
+/*   Updated: 2021/10/03 10:54:15 by scarboni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,11 +38,13 @@ int	init_from_params(t_env *env, int argc, char const *argv[])
 
 void *philosophe_fun (void * v_philo_env)
 {
-	printf("phiiilloob\n");
-	sleep(10);
-	int *res = 0;
-	return res;
+	t_philo_env *philo_env;
 
+	philo_env = (t_philo_env*) v_philo_env;
+	// sleep(10);
+	int *res = 0;
+	try_to_pick_up_fork(philo_env->env, philo_env->num);
+	return res;
 }
 
 int	init_forks(t_env *env)
