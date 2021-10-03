@@ -26,29 +26,18 @@ OBJ_PATHS_INIT			=	$(addprefix $(OBJ_PATH),$(MINILIB_PATH) 	\
 													$(PHILO_PATH))
 ## No need for a \ on the last line
 HEADERS_FILES				=	main.h
-MINILIB						=	
+MINILIB						=	ft_atoi.c \
+								ft_isdigit.c \
+								ft_itoa.c \
+								ft_putchar_fd.c \
+								ft_putnbr_fd.c \
+								ft_putstr_fd.c \
+								ft_strlen.c \
+								ft_strncmp.c \
+								parse_value.c 
 
-								# ft_isdigit.c \
-								# ft_itoa.c \
-								# ft_putchar_fd.c \
-								# ft_putnbr_fd.c \
-								# ft_putstr_fd.c \
-								# ft_strlen.c \
-								# ft_strncmp.c \
-								# parse_value.c \
-								# send.c
-
-PHILO						=	main.c
-
-								# ft_isdigit.c \
-								# ft_itoa.c \
-								# ft_putchar_fd.c \
-								# ft_putnbr_fd.c \
-								# ft_putstr_fd.c \
-								# ft_strlen.c \
-								# ft_strncmp.c \
-								# parse_value.c \
-								# send.c
+PHILO						=	main.c \
+								print_action.c
 
 SRC_FILES += $(addprefix $(MINILIB_PATH), $(MINILIB))
 SRC_FILES += $(addprefix $(PHILO_PATH), $(PHILO))
@@ -62,7 +51,7 @@ OBJ 	= $(addprefix $(OBJ_PATH), $(OBJREGULAR_FILES))
 
 CC			=	clang
 
-LDFLAGS		=	
+LDFLAGS		=	-pthread
 
 RM			= 	rm -f
 
