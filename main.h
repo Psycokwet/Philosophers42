@@ -19,7 +19,6 @@
 # include <string.h>
 # define PARAM_Q 5
 
-void	print_action(int id, int action_code);
 
 # define ACTION_TEXT_FORK	"has taken a fork"
 # define ACTION_TEXT_EAT	"is eating"
@@ -59,8 +58,6 @@ int		parse_value(char const *arg, int *result);
 # define TIME_TO_SLEEP 3
 # define NUMBER_OF_TIMES_EACH_PHILOSOPHER_MUST_EAT 4
 
-
-
 void *memset(void *s, int c, size_t n);
 
 # include <stdio.h>
@@ -89,14 +86,19 @@ void *memset(void *s, int c, size_t n);
 typedef struct s_env {
 	int	params[PARAM_Q];
 	pthread_mutex_t	*forks;
+	pthread_mutex_t	speak;
+	pthread_mutex_t	table;
 } t_env;
 
 typedef struct s_philo_env {
 	t_env		*env;
 	int			num;
 	pthread_t	th;
+	int			eat_count;
 } t_philo_env;
 
-int	try_to_pick_up_fork(t_env *env, int id);
+int	try_to_pick_up_fork(t_philo_env *p_env, int id);
+
+void	print_action(t_env* env, int id, int action_code);
 
 #endif

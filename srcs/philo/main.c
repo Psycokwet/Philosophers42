@@ -6,7 +6,7 @@
 /*   By: scarboni <scarboni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/22 18:54:29 by scarboni          #+#    #+#             */
-/*   Updated: 2021/10/03 10:54:15 by scarboni         ###   ########.fr       */
+/*   Updated: 2021/10/04 09:26:13 by scarboni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,11 +39,29 @@ int	init_from_params(t_env *env, int argc, char const *argv[])
 void *philosophe_fun (void * v_philo_env)
 {
 	t_philo_env *philo_env;
+	int			alive;
 
 	philo_env = (t_philo_env*) v_philo_env;
+	alive = true;
+	while (alive)
+	{
+		// print_action(philo_env->env, philo_env->num, 1);
+
+		print_action(philo_env->env, philo_env->num, ACTION_CODE_SLEEP);
+		usleep(philo_env->env->params[TIME_TO_SLEEP]);
+
+		print_action(philo_env->env, philo_env->num, ACTION_CODE_THINK);
+
+		try_to_pick_up_fork(philo_env, philo_env->num);
+		if (philo_env->eat_count == philo_env->env->params[NUMBER_OF_TIMES_EACH_PHILOSOPHER_MUST_EAT])
+		{
+			int *res = 0;
+			return res;
+		}
+		// print_action(philo_env->env, philo_env->num, ACTION_CODE_DEAD);
+	}
 	// sleep(10);
 	int *res = 0;
-	try_to_pick_up_fork(philo_env->env, philo_env->num);
 	return res;
 }
 
@@ -57,8 +75,6 @@ int	init_forks(t_env *env)
 		return (-EXIT_FAILURE);
 	}
 	// pthread_mutex_t mut;
-	// pthread_mutex_lock(&mut);
-	// pthread_mutex_unlock(&mut);
 
 	i = 0;
 	while (i < env->params[NUMBER_OF_PHILOSOPHER])
@@ -118,7 +134,6 @@ int	main(int argc, char const *argv[])
 	if (init_from_params(&env, argc - 1, &argv[1]) != EXIT_SUCCESS)
 		return (-EXIT_FAILURE);
 	printf("ah que cc bob deb\n");
-	print_action(0, 0);
 	if (init_forks(&env) != EXIT_SUCCESS)
 	{
 		printf("error while initializing forks\n");
