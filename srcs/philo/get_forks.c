@@ -6,7 +6,7 @@
 /*   By: scarboni <scarboni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/05 10:38:18 by scarboni          #+#    #+#             */
-/*   Updated: 2021/10/04 09:25:04 by scarboni         ###   ########.fr       */
+/*   Updated: 2021/10/04 11:10:13 by scarboni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,11 +34,10 @@ int	try_to_pick_up_fork(t_philo_env *p_env, int id)
 		printf("Can't take up two fork, there is only one\n");
 		return (-EXIT_FAILURE);
 	}
-	pthread_mutex_lock(&p_env->env->table);
 	left_id = get_left_fork_id(id);
 	right_id = get_left_right_id(p_env->env, id);
 
-
+	pthread_mutex_lock(&p_env->env->table);
 	pthread_mutex_lock(&p_env->env->forks[left_id]);
 	print_action(p_env->env, p_env->num, ACTION_CODE_FORK);
 	pthread_mutex_lock(&p_env->env->forks[right_id]);
@@ -47,7 +46,7 @@ int	try_to_pick_up_fork(t_philo_env *p_env, int id)
 
 	printf("ID %d has left %d and right %d\n", id, left_id, right_id);
 
-	print_action(p_env->env, p_env->num, ACTION_CODE_EAT);
+	p_env->last_ate = print_action(p_env->env, p_env->num, ACTION_CODE_EAT);
 	p_env->eat_count++;
 	usleep(p_env->env->params[TIME_TO_EAT]);
 

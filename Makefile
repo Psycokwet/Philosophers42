@@ -36,7 +36,8 @@ MINILIB						=	ft_atoi.c \
 								ft_strncmp.c \
 								parse_value.c 
 
-PHILO						=	get_forks.c \
+PHILO						=	get_current_timestamp.c \
+								get_forks.c \
 								main.c \
 								print_action.c
 

@@ -95,10 +95,12 @@ typedef struct s_philo_env {
 	int			num;
 	pthread_t	th;
 	int			eat_count;
+	long		last_ate;
 } t_philo_env;
 
-int	try_to_pick_up_fork(t_philo_env *p_env, int id);
+int		try_to_pick_up_fork(t_philo_env *p_env, int id);
+long	get_current_timestamp();
 
-void	print_action(t_env* env, int id, int action_code);
+long	print_action(t_env* env, int id, int action_code);
 
 #endif

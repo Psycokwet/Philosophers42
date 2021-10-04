@@ -6,7 +6,7 @@
 /*   By: scarboni <scarboni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/22 18:54:29 by scarboni          #+#    #+#             */
-/*   Updated: 2021/10/04 09:26:13 by scarboni         ###   ########.fr       */
+/*   Updated: 2021/10/04 11:19:53 by scarboni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,7 @@ int	init_forks(t_env *env)
 	i = 0;
 	while (i < env->params[NUMBER_OF_PHILOSOPHER])
 	{
+		env->forks[i] = (pthread_mutex_t){};
 		pthread_mutex_init(&env->forks[i], NULL);
 		i++;
 	}
@@ -102,6 +103,8 @@ int wrap_philosophers (t_env * env)
 	while (i < env->params[NUMBER_OF_PHILOSOPHER])
 	{
 		phils[i].num = i;
+		phils[i].last_ate = get_current_timestamp();
+		phils[i].eat_count = 0;
 		phils[i].env = env;
 
 		if (pthread_create(&phils[i].th, NULL, &philosophe_fun, &phils[i]) != EXIT_SUCCESS)
