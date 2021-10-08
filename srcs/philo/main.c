@@ -6,7 +6,7 @@
 /*   By: scarboni <scarboni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/22 18:54:29 by scarboni          #+#    #+#             */
-/*   Updated: 2021/10/08 11:08:22 by scarboni         ###   ########.fr       */
+/*   Updated: 2021/10/08 11:22:46 by scarboni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,13 +87,29 @@ int	init_forks(t_env *env)
 	return (EXIT_SUCCESS);
 }
 
+int	get_last_ate(t_env *env, int i)
+{
+	return (((t_philo_env *)env->p_envs)[i].last_ate);
+}
+
+int	get_state(t_env *env, int i)
+{
+	return (((t_philo_env *)env->p_envs)->state);
+}
+
+void	set_state(t_env *env, int i, int state)
+{
+	((t_philo_env *)env->p_envs)->state = state;
+}
+
 int wrap_philosophers (t_env * env)
 {
 	t_philo_env	*phils;
 	int			i;
 	void			*res;
 
-	phils = malloc(sizeof(t_philo_env) * env->params[NUMBER_OF_PHILOSOPHER]);
+	phils = (t_philo_env *)malloc(sizeof(t_philo_env) * env->params[NUMBER_OF_PHILOSOPHER]);
+	env->p_envs = phils;
 	if (!phils)
 	{
 		printf("error malloc\n");

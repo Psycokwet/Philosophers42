@@ -6,7 +6,7 @@
 /*   By: scarboni <scarboni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/05 10:38:18 by scarboni          #+#    #+#             */
-/*   Updated: 2021/10/07 15:07:00 by scarboni         ###   ########.fr       */
+/*   Updated: 2021/10/08 11:23:12 by scarboni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ long	print_action(t_env* env, int id, int action_code)
 
 	ts = get_current_timestamp();
 	pthread_mutex_lock(&env->speak);
+	set_state(env, id, action_code);
 	ft_putnbr_fd(ts, STDOUT_FILENO);
 	ft_putstr_fd(" ", STDOUT_FILENO);
 	ft_putnbr_fd(id + 1, STDOUT_FILENO);

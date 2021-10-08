@@ -46,11 +46,11 @@
 
 # define PARAM_Q 5
 
-# define ACTION_TEXT_FORK	"has taken a fork"
-# define ACTION_TEXT_EAT	"is eating"
-# define ACTION_TEXT_SLEEP	"is sleeping"
-# define ACTION_TEXT_THINK	"is thinking"
-# define ACTION_TEXT_DEAD	"died"
+# define ACTION_TEXT_FORK	"\033[0;33mhas taken a fork\033[0m"
+# define ACTION_TEXT_EAT	"\033[0;32mis eating\033[0m"
+# define ACTION_TEXT_SLEEP	"\033[0;30mis sleeping\033[0m"
+# define ACTION_TEXT_THINK	"\033[0;34mthinking\033[0m"
+# define ACTION_TEXT_DEAD	"\033[0;31mdied\033[0m"
 
 # define ACTION_CODE_FORK	0
 # define ACTION_CODE_EAT	1
@@ -101,6 +101,7 @@ typedef struct s_env {
 typedef struct s_philo_env {
 	t_env		*env;
 	int			num;
+	int			state;
 	pthread_t	th;
 	int			eat_count;
 	long		last_ate;
@@ -110,5 +111,9 @@ int		try_to_pick_up_fork(t_philo_env *p_env, int id);
 long	get_current_timestamp(void);
 
 long	print_action(t_env *env, int id, int action_code);
+
+int		get_last_ate(t_env *env, int i);
+int		get_state(t_env *env, int i);
+void	set_state(t_env *env, int i, int state);
 
 #endif
