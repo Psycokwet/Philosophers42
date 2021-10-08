@@ -6,7 +6,7 @@
 /*   By: scarboni <scarboni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/22 18:54:29 by scarboni          #+#    #+#             */
-/*   Updated: 2021/10/04 11:19:53 by scarboni         ###   ########.fr       */
+/*   Updated: 2021/10/08 11:08:22 by scarboni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,6 +115,7 @@ int wrap_philosophers (t_env * env)
 		i++;
 	}
 	i = 0;
+	
 	while (i < env->params[NUMBER_OF_PHILOSOPHER])
 	{
 		pthread_join(phils[i].th, &res);
@@ -126,6 +127,8 @@ int wrap_philosophers (t_env * env)
 		}
 		i++;
 	}
+	free(phils);
+	free(env->forks);
 	return (EXIT_SUCCESS);
 }
 
