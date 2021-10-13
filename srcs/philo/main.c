@@ -6,7 +6,7 @@
 /*   By: scarboni <scarboni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/22 18:54:29 by scarboni          #+#    #+#             */
-/*   Updated: 2021/10/08 11:22:46 by scarboni         ###   ########.fr       */
+/*   Updated: 2021/10/13 19:36:07 by scarboni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,27 +65,27 @@ void *philosophe_fun (void * v_philo_env)
 	return res;
 }
 
-int	init_forks(t_env *env)
+
+int	init_mutexes(pthread_mutex_t **list, int max)
 {
 	int	i;
-	env->forks = malloc(sizeof(pthread_mutex_t) * env->params[NUMBER_OF_PHILOSOPHER]);
-	if (!env->forks)
+
+	*list = malloc(sizeof(pthread_mutex_t) * max);
+	if (!(*list))
 	{
 		printf("error malloc\n");
 		return (-EXIT_FAILURE);
 	}
-	// pthread_mutex_t mut;
-
 	i = 0;
-	while (i < env->params[NUMBER_OF_PHILOSOPHER])
+	while (i < max)
 	{
-		env->forks[i] = (pthread_mutex_t){};
-		pthread_mutex_init(&env->forks[i], NULL);
+		(*list)[i] = (pthread_mutex_t){};
+		pthread_mutex_init(&(*list)[i], NULL);
 		i++;
 	}
-
 	return (EXIT_SUCCESS);
 }
+
 
 int	get_last_ate(t_env *env, int i)
 {
@@ -102,11 +102,27 @@ void	set_state(t_env *env, int i, int state)
 	((t_philo_env *)env->p_envs)->state = state;
 }
 
+
+int	get_left_fork_id(int id)
+{
+	return (id);
+}
+
+int	get_left_right_id(t_env *env, int id)
+{
+	if (id == 0)
+		return (env->params[NUMBER_OF_PHILOSOPHER] - 1);
+	return (id - 1);
+}
+
+
 int wrap_philosophers (t_env * env)
 {
 	t_philo_env	*phils;
 	int			i;
-	void			*res;
+	void		*res;
+	int			left;
+	int			right;
 
 	phils = (t_philo_env *)malloc(sizeof(t_philo_env) * env->params[NUMBER_OF_PHILOSOPHER]);
 	env->p_envs = phils;
@@ -118,11 +134,22 @@ int wrap_philosophers (t_env * env)
 	i = 0;
 	while (i < env->params[NUMBER_OF_PHILOSOPHER])
 	{
+		left = get_left_fork_id(i);
+		right = get_left_right_id(env, i);
 		phils[i].num = i;
 		phils[i].last_ate = get_current_timestamp();
 		phils[i].eat_count = 0;
 		phils[i].env = env;
-
+		if (i % 2 == 1)
+		{
+			phils[i].f1 = left;
+			phils[i].f2 = right;
+		}
+		else
+		{
+			phils[i].f1 = right;
+			phils[i].f2 = left;
+		}
 		if (pthread_create(&phils[i].th, NULL, &philosophe_fun, &phils[i]) != EXIT_SUCCESS)
 		{
 			printf("error for creating thread :(\n");
@@ -155,16 +182,11 @@ int	main(int argc, char const *argv[])
 	env = (t_env){};
 	if (init_from_params(&env, argc - 1, &argv[1]) != EXIT_SUCCESS)
 		return (-EXIT_FAILURE);
-	printf("ah que cc bob deb\n");
-	if (init_forks(&env) != EXIT_SUCCESS)
-	{
-		printf("error while initializing forks\n");
-		return (-EXIT_FAILURE);
-	}
+	if (init_mutexes(&env.forks, env.params[NUMBER_OF_PHILOSOPHER]) != EXIT_SUCCESS)
+		return (quit(&env, "error while initializing forks", -EXIT_FAILURE));
+	if (init_mutexes(&env.mutex_bank, MUTEX_G_Q) != EXIT_SUCCESS)
+		return (quit(&env, "error while initializing global mutexes", -EXIT_FAILURE));
 	if (wrap_philosophers(&env) != EXIT_SUCCESS)
-	{
-		printf("error for waiting thread :(\n");
-		return (-EXIT_FAILURE);
-	}
-	printf("The execution have come to an end\n");
+		return (quit(&env, "error for waiting thread", -EXIT_FAILURE));
+	return (quit(&env, "The execution have come to an end", EXIT_SUCCESS));	
 }

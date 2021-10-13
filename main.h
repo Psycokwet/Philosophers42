@@ -90,16 +90,25 @@ enum states {
 	THINKING, EATING, SLEEPING
 };
 
+#define SPEAK_MUT 0
+#define TABLE_MUT 1
+#define DEATH_MUT 2
+
+#define MUTEX_G_Q 3
+
+
 typedef struct s_env {
 	int					params[PARAM_Q];
+	int					stop;
 	pthread_mutex_t		*forks;
-	pthread_mutex_t		speak;
-	pthread_mutex_t		table;
+	pthread_mutex_t		*mutex_bank;
 	void				*p_envs;
 }	t_env;
 
 typedef struct s_philo_env {
 	t_env		*env;
+	int			f1;
+	int			f2;
 	int			num;
 	int			state;
 	pthread_t	th;
@@ -110,10 +119,15 @@ typedef struct s_philo_env {
 int		try_to_pick_up_fork(t_philo_env *p_env, int id);
 long	get_current_timestamp(void);
 
-long	print_action(t_env *env, int id, int action_code);
+void	clean_env(t_env* env);
+int		do_action(t_philo_env* p_env, int action_code, void *(*action)(t_philo_env*));
 
 int		get_last_ate(t_env *env, int i);
 int		get_state(t_env *env, int i);
 void	set_state(t_env *env, int i, int state);
+
+long	print_action(t_env *env, int id, int action_code);
+
+int	quit(t_env* env, char *message, int exit_code);
 
 #endif

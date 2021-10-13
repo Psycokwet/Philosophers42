@@ -36,10 +36,13 @@ MINILIB						=	ft_atoi.c \
 								ft_strncmp.c \
 								parse_value.c 
 
-PHILO						=	get_current_timestamp.c \
+PHILO						=	clean_env.c \
+								do_action.c \
+								get_current_timestamp.c \
 								get_forks.c \
 								main.c \
-								print_action.c
+								print_action.c \
+								quit.c
 
 SRC_FILES += $(addprefix $(MINILIB_PATH), $(MINILIB))
 SRC_FILES += $(addprefix $(PHILO_PATH), $(PHILO))
