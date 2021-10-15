@@ -103,6 +103,7 @@ typedef struct s_env {
 	pthread_mutex_t		*forks;
 	pthread_mutex_t		*mutex_bank;
 	void				*p_envs;
+	long				started_at;
 }	t_env;
 
 typedef struct s_philo_env {
@@ -120,7 +121,8 @@ int		try_to_pick_up_fork(t_philo_env *p_env, int id);
 long	get_current_timestamp(void);
 
 void	clean_env(t_env* env);
-int		do_action(t_philo_env* p_env, int action_code, void *(*action)(t_philo_env*));
+
+int		do_action(t_philo_env* p_env, int action_code, void (*pre_action)(t_philo_env*), void (*post_action)(t_philo_env*));
 
 int		get_last_ate(t_env *env, int i);
 int		get_state(t_env *env, int i);
@@ -128,6 +130,7 @@ void	set_state(t_env *env, int i, int state);
 
 long	print_action(t_env *env, int id, int action_code);
 
-int	quit(t_env* env, char *message, int exit_code);
+int		quit(t_env* env, char *message, int exit_code);
+void	*quit_philo(int exit_code);
 
 #endif

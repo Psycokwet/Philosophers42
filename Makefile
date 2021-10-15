@@ -42,6 +42,7 @@ PHILO						=	clean_env.c \
 								get_forks.c \
 								main.c \
 								print_action.c \
+								quit_philo.c \
 								quit.c
 
 SRC_FILES += $(addprefix $(MINILIB_PATH), $(MINILIB))

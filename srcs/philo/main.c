@@ -6,7 +6,7 @@
 /*   By: scarboni <scarboni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/22 18:54:29 by scarboni          #+#    #+#             */
-/*   Updated: 2021/10/13 19:36:07 by scarboni         ###   ########.fr       */
+/*   Updated: 2021/10/15 08:31:01 by scarboni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,11 @@ int	init_from_params(t_env *env, int argc, char const *argv[])
 	return (EXIT_SUCCESS);
 }
 
+void post_action_sleep(t_philo_env* philo_env)
+{
+	usleep(philo_env->env->params[TIME_TO_SLEEP]);
+}
+
 void *philosophe_fun (void * v_philo_env)
 {
 	t_philo_env *philo_env;
@@ -45,12 +50,10 @@ void *philosophe_fun (void * v_philo_env)
 	alive = true;
 	while (alive)
 	{
-		// print_action(philo_env->env, philo_env->num, 1);
-
-		print_action(philo_env->env, philo_env->num, ACTION_CODE_SLEEP);
-		usleep(philo_env->env->params[TIME_TO_SLEEP]);
-
-		print_action(philo_env->env, philo_env->num, ACTION_CODE_THINK);
+		if (do_action(philo_env, ACTION_CODE_SLEEP, NULL, &post_action_sleep) != EXIT_SUCCESS)
+			return (quit_philo(-EXIT_FAILURE));
+		if (do_action(philo_env, ACTION_CODE_THINK, NULL, NULL) != EXIT_SUCCESS)
+			return (quit_philo(-EXIT_FAILURE));
 
 		try_to_pick_up_fork(philo_env, philo_env->num);
 		if (philo_env->eat_count == philo_env->env->params[NUMBER_OF_TIMES_EACH_PHILOSOPHER_MUST_EAT])
@@ -137,7 +140,7 @@ int wrap_philosophers (t_env * env)
 		left = get_left_fork_id(i);
 		right = get_left_right_id(env, i);
 		phils[i].num = i;
-		phils[i].last_ate = get_current_timestamp();
+		phils[i].last_ate = env->started_at;
 		phils[i].eat_count = 0;
 		phils[i].env = env;
 		if (i % 2 == 1)
@@ -186,6 +189,7 @@ int	main(int argc, char const *argv[])
 		return (quit(&env, "error while initializing forks", -EXIT_FAILURE));
 	if (init_mutexes(&env.mutex_bank, MUTEX_G_Q) != EXIT_SUCCESS)
 		return (quit(&env, "error while initializing global mutexes", -EXIT_FAILURE));
+	env.started_at = get_current_timestamp();
 	if (wrap_philosophers(&env) != EXIT_SUCCESS)
 		return (quit(&env, "error for waiting thread", -EXIT_FAILURE));
 	return (quit(&env, "The execution have come to an end", EXIT_SUCCESS));	
