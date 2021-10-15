@@ -6,7 +6,7 @@
 /*   By: scarboni <scarboni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/05 10:38:18 by scarboni          #+#    #+#             */
-/*   Updated: 2021/10/13 19:53:50 by scarboni         ###   ########.fr       */
+/*   Updated: 2021/10/15 08:46:10 by scarboni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,11 +27,11 @@ int	try_to_pick_up_fork(t_philo_env *p_env, int id)
 	print_action(p_env->env, p_env->num, ACTION_CODE_FORK);
 	pthread_mutex_unlock(&p_env->env->mutex_bank[TABLE_MUT]);
 
-	p_env->last_ate = print_action(p_env->env, p_env->num, ACTION_CODE_EAT);
-	p_env->eat_count++;
-	usleep(p_env->env->params[TIME_TO_EAT]);
+	// // p_env->last_ate = print_action(p_env->env, p_env->num, ACTION_CODE_EAT);
+	// p_env->eat_count++;
+	// usleep(p_env->env->params[TIME_TO_EAT]);
 
-	pthread_mutex_unlock(&p_env->env->forks[p_env->f1]);
-	pthread_mutex_unlock(&p_env->env->forks[p_env->f2]);
+	// pthread_mutex_unlock(&p_env->env->forks[p_env->f1]);
+	// pthread_mutex_unlock(&p_env->env->forks[p_env->f2]);
 	return (EXIT_SUCCESS);
 }

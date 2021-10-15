@@ -114,7 +114,7 @@ typedef struct s_philo_env {
 	int			state;
 	pthread_t	th;
 	int			eat_count;
-	long		last_ate;
+	long		last_time[MAX_ACTIONS];
 }	t_philo_env;
 
 int		try_to_pick_up_fork(t_philo_env *p_env, int id);
@@ -122,7 +122,7 @@ long	get_current_timestamp(void);
 
 void	clean_env(t_env* env);
 
-int		do_action(t_philo_env* p_env, int action_code, void (*pre_action)(t_philo_env*), void (*post_action)(t_philo_env*));
+int	do_action(t_philo_env* p_env, int action_code, int (*pre_action)(t_philo_env*), void (*post_action)(t_philo_env*));
 
 int		get_last_ate(t_env *env, int i);
 int		get_state(t_env *env, int i);
