@@ -43,6 +43,7 @@
 // pthread_mutex_destroy
 // pthread_mutex_lock
 // pthread_mutex_unlock
+# define CANT_DIE -1
 
 # define PARAM_Q 5
 
@@ -51,19 +52,24 @@
 # define ACTION_TEXT_SLEEP	"\033[0;30mis sleeping\033[0m"
 # define ACTION_TEXT_THINK	"\033[0;34mthinking\033[0m"
 # define ACTION_TEXT_DEAD	"\033[0;31mdied\033[0m"
+# define ACTION_TEXT_DEAD_D1	"\033[0;31mdied_d1\033[0m"
+# define ACTION_TEXT_DEAD_D2	"\033[0;31mdied_d2\033[0m"
 
 # define ACTION_CODE_FORK	0
 # define ACTION_CODE_EAT	1
 # define ACTION_CODE_SLEEP	2
 # define ACTION_CODE_THINK	3
 # define ACTION_CODE_DEAD	4
+# define ACTION_CODE_DEAD_D1	5
+# define ACTION_CODE_DEAD_D2	6
 
-# define MAX_ACTIONS		5
+// # define MAX_ACTIONS		5
+# define MAX_ACTIONS		7
 
 static char	*g_actions_string[MAX_ACTIONS] =
 {
 	ACTION_TEXT_FORK, ACTION_TEXT_EAT, ACTION_TEXT_SLEEP,
-	ACTION_TEXT_THINK, ACTION_TEXT_DEAD
+	ACTION_TEXT_THINK, ACTION_TEXT_DEAD, ACTION_TEXT_DEAD_D1, ACTION_TEXT_DEAD_D2
 };
 
 int		ft_atoi(const char *str);
@@ -122,15 +128,16 @@ long	get_current_timestamp(void);
 
 void	clean_env(t_env* env);
 
-int	do_action(t_philo_env* p_env, int action_code, int (*pre_action)(t_philo_env*), void (*post_action)(t_philo_env*));
+int	do_action(t_philo_env* p_env, int action_code, int (*pre_action)(t_philo_env*), int (*post_action)(t_philo_env*), void (*clean_if_death_action)(t_philo_env*));
 
 int		get_last_ate(t_env *env, int i);
 int		get_state(t_env *env, int i);
 void	set_state(t_env *env, int i, int state);
 
+int		my_usleep(int delay_in_millis, int max_time_before_death);
 long	print_action(t_env *env, int id, int action_code);
 
 int		quit(t_env* env, char *message, int exit_code);
-void	*quit_philo(int exit_code);
+void	*quit_philo(int exit_code, t_philo_env* p_env);
 
 #endif

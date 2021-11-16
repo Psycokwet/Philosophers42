@@ -1,5 +1,5 @@
-NAME			=	philo
-BONUS			=	philo_bonus
+NAME				=	philo
+NAME_BONUS			=	philo_bonus
 
 BONUS 				=   bonus
 
@@ -16,7 +16,7 @@ ifdef WITH_BONUS
 	CFLAGS	+= -DBONUS -DIF_BONUS=true
 
 	OBJ_PATH	= $(OBJ_BONUS_PATH)
-	NAME	=	$(BONUS)
+	NAME	=	$(NAME_BONUS)
 else
 	CFLAGS	+= -DIF_BONUS=false
 endif
@@ -41,6 +41,7 @@ PHILO						=	clean_env.c \
 								get_current_timestamp.c \
 								get_forks.c \
 								main.c \
+								my_usleep.c \
 								print_action.c \
 								quit_philo.c \
 								quit.c
