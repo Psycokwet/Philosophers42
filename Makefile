@@ -38,6 +38,7 @@ MINILIB						=	ft_atoi.c \
 
 PHILO						=	clean_env.c \
 								do_action.c \
+								get_base_timestamp.c \
 								get_current_timestamp.c \
 								get_forks.c \
 								main.c \
@@ -88,3 +89,5 @@ re				:	fclean all							## delete all .o and recompile all. Must use when editi
 
 .PHONY			:	all bonus clean fclean re
 ## voir dependances plus tard 
+
+➜  rmouduri_pipex git:(master) ✗ sudo apt-get install libreadline-dev 

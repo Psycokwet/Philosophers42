@@ -6,7 +6,7 @@
 /*   By: scarboni <scarboni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/22 18:54:29 by scarboni          #+#    #+#             */
-/*   Updated: 2021/11/16 18:02:52 by scarboni         ###   ########.fr       */
+/*   Updated: 2021/11/20 14:52:55 by scarboni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ int	init_from_params(t_env *env, int argc, char const *argv[])
 
 int post_action_sleep(t_philo_env* p_env)
 {
-	return (my_usleep(p_env->env->params[TIME_TO_SLEEP], p_env->last_time[ACTION_CODE_EAT] + p_env->env->params[TIME_TO_DIE]));
+	return (my_usleep(p_env->env, p_env->env->params[TIME_TO_SLEEP], p_env->last_time[ACTION_CODE_EAT] + p_env->env->params[TIME_TO_DIE]));
 }
 
 int pre_action_eat(t_philo_env* p_env)
@@ -59,7 +59,7 @@ int take_second_fork(t_philo_env* p_env)
 {
 	if (p_env->env->params[NUMBER_OF_PHILOSOPHER] == 1)
 	{
-		my_usleep(p_env->env->params[TIME_TO_DIE] - (get_current_timestamp() - p_env->env->started_at), p_env->env->params[TIME_TO_DIE]);
+		my_usleep(p_env->env, p_env->env->params[TIME_TO_DIE] - get_current_timestamp(p_env->env), p_env->env->params[TIME_TO_DIE]);
 		print_action(p_env->env, p_env->num, ACTION_CODE_DEAD+2);
 		return (-EXIT_FAILURE);
 	}
@@ -69,28 +69,31 @@ int take_second_fork(t_philo_env* p_env)
 	return (EXIT_SUCCESS);
 }
 
-int post_action_eat(t_philo_env* p_env)
-{
-	int ret;
-
-	p_env->eat_count++;
-	ret = my_usleep(p_env->env->params[TIME_TO_EAT], CANT_DIE);
-	// printf("TIME TO EAT %d\n",p_env->env->params[TIME_TO_EAT] );
-// printf("AH QUE CC BOB %ld, %d :: %d\n", p_env->last_time[ACTION_CODE_EAT] - p_env->env->started_at, p_env->eat_count, p_env->env->params[NUMBER_OF_TIMES_EACH_PHILOSOPHER_MUST_EAT]);
-	pthread_mutex_unlock(&p_env->env->forks[p_env->f1]);
-	pthread_mutex_unlock(&p_env->env->forks[p_env->f2]);
-	return (ret);
-}
-
 void clean_first_fork(t_philo_env* p_env)
 {
 	pthread_mutex_unlock(&p_env->env->forks[p_env->f1]);
 }
 
-void clean_second_fork(t_philo_env* p_env)
+void clean_both_fork(t_philo_env* p_env)
 {
+	pthread_mutex_unlock(&p_env->env->forks[p_env->f1]);
 	pthread_mutex_unlock(&p_env->env->forks[p_env->f2]);
 }
+
+int post_action_eat(t_philo_env* p_env)
+{
+	int ret;
+
+	p_env->eat_count++;
+	ret = my_usleep(p_env->env, p_env->env->params[TIME_TO_EAT], p_env->last_time[ACTION_CODE_EAT] + p_env->env->params[TIME_TO_DIE]);
+	// printf("TIME TO EAT %d\n",p_env->env->params[TIME_TO_EAT] );
+// printf("AH QUE CC BOB %ld, %d :: %d\n", p_env->last_time[ACTION_CODE_EAT] - p_env->env->started_at, p_env->eat_count, p_env->env->params[NUMBER_OF_TIMES_EACH_PHILOSOPHER_MUST_EAT]);
+	// pthread_mutex_unlock(&p_env->env->forks[p_env->f1]);
+	// pthread_mutex_unlock(&p_env->env->forks[p_env->f2]);
+	clean_both_fork(p_env);
+	return (ret);
+}
+
 
 void *philosophe_fun (void * v_philo_env)
 {
@@ -99,19 +102,25 @@ void *philosophe_fun (void * v_philo_env)
 	p_env = (t_philo_env*) v_philo_env;
 	while (true)
 	{
-		if (do_action(p_env, ACTION_CODE_FORK, &take_first_fork, NULL, &clean_first_fork) != EXIT_SUCCESS)
+		if (do_action(p_env, ACTION_CODE_THINK) != EXIT_SUCCESS)
+			return (quit_philo(-ACTION_CODE_THINK, p_env));
+
+		// while (p_env->last_time[ACTION_CODE_EAT] != 0 && get_current_timestamp(p_env->env) - p_env->last_time[ACTION_CODE_EAT] < 5)
+		// {
+		// 	printf("%ld::%ld\n", p_env->last_time[ACTION_CODE_EAT], get_current_timestamp(p_env->env));
+		// 	usleep(100);
+		// }
+		if (do_action_with_clean(p_env, ACTION_CODE_FORK, &take_first_fork, &clean_first_fork) != EXIT_SUCCESS)
 			return (quit_philo(-ACTION_CODE_FORK, p_env));
-		if (do_action(p_env, ACTION_CODE_FORK, &take_second_fork, NULL, &clean_second_fork) != EXIT_SUCCESS)
+		if (do_action_with_clean(p_env, ACTION_CODE_FORK, &take_second_fork, &clean_both_fork) != EXIT_SUCCESS)
 			return (quit_philo(-ACTION_CODE_FORK, p_env));
-		if (do_action(p_env, ACTION_CODE_EAT, NULL, &post_action_eat, NULL) != EXIT_SUCCESS)
+		if (do_action_with_post(p_env, ACTION_CODE_EAT, &post_action_eat) != EXIT_SUCCESS)
 			return (quit_philo(-ACTION_CODE_EAT, p_env));		
 		if (p_env->eat_count == p_env->env->params[NUMBER_OF_TIMES_EACH_PHILOSOPHER_MUST_EAT])
 			return (quit_philo(EXIT_SUCCESS, p_env));
-		if (do_action(p_env, ACTION_CODE_SLEEP, NULL, &post_action_sleep, NULL) != EXIT_SUCCESS)
+		if (do_action_with_post(p_env, ACTION_CODE_SLEEP, &post_action_sleep) != EXIT_SUCCESS)
 			return (quit_philo(-ACTION_CODE_SLEEP, p_env));
-		if (do_action(p_env, ACTION_CODE_THINK, NULL, NULL, NULL) != EXIT_SUCCESS)
-			return (quit_philo(-ACTION_CODE_THINK, p_env));
-	}
+		}
 	return NULL;
 }
 
@@ -165,9 +174,33 @@ int	get_right_fork_id(t_env *env, int id)
 	return (id - 1);
 }
 
-int	start_philo()
+int	start_philo(t_philo_env *phils, int i, t_env * env)
 {
-	
+	int			left;
+	int			right;
+
+	left = get_left_fork_id(i);
+	right = get_right_fork_id(env, i);
+	phils[i].num = i;
+	phils[i].last_time[ACTION_CODE_EAT] = 0;
+	phils[i].eat_count = 0;
+	phils[i].env = env;
+	if (i % 2 == 1)
+	{
+		phils[i].f1 = left;
+		phils[i].f2 = right;
+	}
+	else
+	{
+		phils[i].f1 = right;
+		phils[i].f2 = left;
+	}
+	if (pthread_create(&phils[i].th, NULL, &philosophe_fun, &phils[i]) != EXIT_SUCCESS)
+	{
+		printf("error for creating thread :(\n");
+		return (-EXIT_FAILURE);
+	}
+	return (EXIT_SUCCESS);
 }
 
 int wrap_philosophers (t_env * env)
@@ -175,8 +208,6 @@ int wrap_philosophers (t_env * env)
 	t_philo_env	*phils;
 	int			i;
 	void		*res;
-	int			left;
-	int			right;
 
 	phils = (t_philo_env *)malloc(sizeof(t_philo_env) * env->params[NUMBER_OF_PHILOSOPHER]);
 	env->p_envs = phils;
@@ -186,31 +217,18 @@ int wrap_philosophers (t_env * env)
 		return (-EXIT_FAILURE);
 	}
 	i = 0;
-	env->started_at = get_current_timestamp();
+	env->started_at = get_base_timestamp();
 	while (i < env->params[NUMBER_OF_PHILOSOPHER])
 	{
-		left = get_left_fork_id(i);
-		right = get_right_fork_id(env, i);
-		phils[i].num = i;
-		phils[i].last_time[ACTION_CODE_EAT] = env->started_at;
-		phils[i].eat_count = 0;
-		phils[i].env = env;
-		if (i % 2 == 1)
-		{
-			phils[i].f1 = left;
-			phils[i].f2 = right;
-		}
-		else
-		{
-			phils[i].f1 = right;
-			phils[i].f2 = left;
-		}
-		if (pthread_create(&phils[i].th, NULL, &philosophe_fun, &phils[i]) != EXIT_SUCCESS)
-		{
-			printf("error for creating thread :(\n");
-			return (-EXIT_FAILURE);
-		}
-		i++;
+		start_philo(phils, i, env);
+		i += 2;
+	}
+	i = 1;
+	// sleep(100);
+	while (i < env->params[NUMBER_OF_PHILOSOPHER])
+	{
+		start_philo(phils, i, env);
+		i += 2;
 	}
 	i = 0;
 	

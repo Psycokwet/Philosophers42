@@ -43,8 +43,6 @@
 // pthread_mutex_destroy
 // pthread_mutex_lock
 // pthread_mutex_unlock
-# define CANT_DIE -1
-
 # define PARAM_Q 5
 
 # define ACTION_TEXT_FORK	"\033[0;33mhas taken a fork\033[0m"
@@ -124,17 +122,25 @@ typedef struct s_philo_env {
 }	t_philo_env;
 
 int		try_to_pick_up_fork(t_philo_env *p_env, int id);
-long	get_current_timestamp(void);
+long	get_base_timestamp(void);
+long	get_current_timestamp(t_env *env);
 
 void	clean_env(t_env* env);
 
-int	do_action(t_philo_env* p_env, int action_code, int (*pre_action)(t_philo_env*), int (*post_action)(t_philo_env*), void (*clean_if_death_action)(t_philo_env*));
+//int	do_action(t_philo_env* p_env, int action_code, int (*pre_action)(t_philo_env*), int (*post_action)(t_philo_env*), void (*clean_if_death_action)(t_philo_env*));
+
+
+int	do_action(t_philo_env* p_env, int action_code);
+int	do_action_with_clean(t_philo_env* p_env, int action_code, int (*pre_action)(t_philo_env*), void (*clean_if_death_action)(t_philo_env*));
+int	do_action_with_post(t_philo_env* p_env, int action_code, int (*post_action)(t_philo_env*));
+
 
 int		get_last_ate(t_env *env, int i);
 int		get_state(t_env *env, int i);
 void	set_state(t_env *env, int i, int state);
 
-int		my_usleep(int delay_in_millis, int max_time_before_death);
+
+int		my_usleep(t_env *env, int delay_in_millis, int max_time_before_death);
 long	print_action(t_env *env, int id, int action_code);
 
 int		quit(t_env* env, char *message, int exit_code);
