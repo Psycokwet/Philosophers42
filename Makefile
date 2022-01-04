@@ -10,7 +10,7 @@ OBJ_BONUS_PATH		= bin/bonus/
 MINILIB_PATH		= minilib/
 PHILO_PATH			= philo/
 
-CFLAGS		+=	-W -Wall -Wextra -D BUFFER_SIZE=32 -g3 #-Werror  -pedantic 		## '+=' allow to keep default flags.
+CFLAGS		+=	-W -Wall -Wextra -D BUFFER_SIZE=32 -g3 -pg #-Werror  -pedantic 		## '+=' allow to keep default flags.
 
 ifdef WITH_BONUS
 	CFLAGS	+= -DBONUS -DIF_BONUS=true
