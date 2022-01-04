@@ -1,2 +1,17 @@
 # Philosophers42
 42 project
+
+NO ONE EAT, DIES
+./philo 1 800 200 200
+
+NO ONE DIES
+./philo 5 800 200 200
+
+NO ONE DIES, STOP AFTER 7 MEALS
+./philo 5 800 200 200 7
+
+NO ONE DIES
+./philo 4 410 200 200
+
+ONE DIES
+./philo 4 310 200 200
