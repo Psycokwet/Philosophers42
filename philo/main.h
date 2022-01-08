@@ -136,4 +136,16 @@ long	print_action(t_env *env, int id, int action_code);
 int		quit(t_env *env, char *message, int exit_code);
 void	*quit_philo(int exit_code, t_philo_env *p_env);
 
+int		post_action_sleep(t_philo_env *p_env);
+int		pre_action_eat(t_philo_env *p_env);
+int		take_first_fork(t_philo_env *p_env);
+int		take_second_fork(t_philo_env *p_env);
+
+void	clean_first_fork(t_philo_env *p_env);
+void	clean_both_fork(t_philo_env *p_env);
+int		post_action_eat(t_philo_env *p_env);
+int		post_action_eat(t_philo_env *p_env);
+void	*philosophe_fun(void *v_philo_env);
+int		wrap_philosophers(t_env *env);
+int		start_philo(t_philo_env *phils, int i, t_env *env);
 #endif

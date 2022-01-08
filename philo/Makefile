@@ -38,13 +38,16 @@ MINILIB						=	ft_atoi.c \
 								ft_putnbr_str.c \
 								ft_memcpy.c
 
-PHILO						=	clean_env.c \
+PHILO						=	actions_1.c \
+								actions_2.c \
+								clean_env.c \
 								do_action.c \
 								get_base_timestamp.c \
 								get_current_timestamp.c \
 								get_forks.c \
 								main.c \
 								my_usleep.c \
+								philosophes.c \
 								print_action.c \
 								quit_philo.c \
 								quit.c

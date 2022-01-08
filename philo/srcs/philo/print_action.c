@@ -6,7 +6,7 @@
 /*   By: scarboni <scarboni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/05 10:38:18 by scarboni          #+#    #+#             */
-/*   Updated: 2022/01/08 16:27:04 by scarboni         ###   ########.fr       */
+/*   Updated: 2022/01/08 16:45:32 by scarboni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,11 @@ int	ft_putstr_str(char *src, char *dst)
 	len_src = ft_strlen(src);
 	ft_memcpy(dst, src, len_src);
 	return (len_src);
+}
+
+void	set_state(t_env *env, int id, int state)
+{
+	((t_philo_env *)env->p_envs)[id].state = state;
 }
 
 long	print_action(t_env *env, int id, int action_code)
