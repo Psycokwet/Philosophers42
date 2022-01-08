@@ -6,7 +6,7 @@
 /*   By: scarboni <scarboni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/22 18:54:29 by scarboni          #+#    #+#             */
-/*   Updated: 2022/01/08 16:44:11 by scarboni         ###   ########.fr       */
+/*   Updated: 2022/01/08 17:55:32 by scarboni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,19 +31,11 @@ int	start_philo(t_philo_env *phils, int i, t_env *env)
 
 	left = get_left_fork_id(i);
 	right = get_right_fork_id(env, i);
-	phils[i].num = i;
-	phils[i].last_time[ACTION_CODE_EAT] = 0;
-	phils[i].eat_count = 0;
-	phils[i].env = env;
+	phils[i] = (t_philo_env){env, right, left, i, -1, 0, 0, {0}};
 	if (i % 2 == 1)
 	{
 		phils[i].f1 = left;
 		phils[i].f2 = right;
-	}
-	else
-	{
-		phils[i].f1 = right;
-		phils[i].f2 = left;
 	}
 	if (pthread_create(&phils[i].th, NULL, &philosophe_fun, &phils[i])
 		!= EXIT_SUCCESS)
