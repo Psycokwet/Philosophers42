@@ -1,19 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_putnbr_fd.c                                     :+:      :+:    :+:   */
+/*   ft_putnbr_str.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: scarboni <scarboni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/05 10:38:18 by scarboni          #+#    #+#             */
-/*   Updated: 2021/09/27 14:53:06 by scarboni         ###   ########.fr       */
+/*   Updated: 2022/01/08 16:29:40 by scarboni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../main.h"
 #include <unistd.h>
 
-static int	ft_putnbr_str_int(int n, char* s, int *i)
+static int	ft_putnbr_str_int(int n, char *s, int *i)
 {
 	if (n < 10)
 	{
@@ -27,7 +27,7 @@ static int	ft_putnbr_str_int(int n, char* s, int *i)
 	}
 }
 
-int	ft_putnbr_str(int n, char* s)
+int	ft_putnbr_str(int n, char *s)
 {
 	int	i;
 
