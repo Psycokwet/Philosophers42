@@ -6,7 +6,7 @@
 /*   By: scarboni <scarboni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/22 18:54:29 by scarboni          #+#    #+#             */
-/*   Updated: 2022/01/08 16:40:12 by scarboni         ###   ########.fr       */
+/*   Updated: 2022/01/08 21:04:36 by scarboni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,8 +40,6 @@ void	*philosophe_fun(void *v_philo_env)
 	t_philo_env	*p_env;
 
 	p_env = (t_philo_env *) v_philo_env;
-	ft_putstr_fd("\r", STDOUT_FILENO);
-	usleep((p_env->num * 12634556) % 1000);
 	while (true)
 	{
 		if (do_action(p_env, ACTION_CODE_THINK) != EXIT_SUCCESS)
