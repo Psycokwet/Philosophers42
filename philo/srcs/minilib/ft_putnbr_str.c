@@ -6,14 +6,14 @@
 /*   By: scarboni <scarboni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/05 10:38:18 by scarboni          #+#    #+#             */
-/*   Updated: 2022/01/08 16:29:40 by scarboni         ###   ########.fr       */
+/*   Updated: 2022/01/11 11:41:05 by scarboni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../main.h"
 #include <unistd.h>
 
-static int	ft_putnbr_str_int(int n, char *s, int *i)
+static void	ft_putnbr_str_int(int n, char *s, int *i)
 {
 	if (n < 10)
 	{

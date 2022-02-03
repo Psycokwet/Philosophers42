@@ -6,7 +6,7 @@
 /*   By: scarboni <scarboni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/22 18:54:29 by scarboni          #+#    #+#             */
-/*   Updated: 2022/01/08 16:43:25 by scarboni         ###   ########.fr       */
+/*   Updated: 2022/01/11 12:13:38 by scarboni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 int	init_from_params(t_env *env, int argc, char const *argv[])
 {
 	int	i;
+	int	tmp;
 
 	if (argc != PARAM_Q && argc != (PARAM_Q - 1))
 	{
@@ -24,12 +25,13 @@ int	init_from_params(t_env *env, int argc, char const *argv[])
 	i = 0;
 	while (i < argc)
 	{
-		if (parse_value(argv[i], &env->params[i]) != EXIT_SUCCESS
-			|| env->params[i] < 1)
+		if (parse_value(argv[i], &tmp) != EXIT_SUCCESS
+			|| tmp < 1)
 		{
 			printf("Error while parsing parameters, abort\n");
 			return (-EXIT_FAILURE);
 		}
+		env->params[i] = tmp;
 		i++;
 	}
 	if (i < PARAM_Q)
@@ -50,7 +52,7 @@ int	init_mutexes(pthread_mutex_t **list, int max)
 	i = 0;
 	while (i < max)
 	{
-		(*list)[i] = (pthread_mutex_t){};
+		(*list)[i] = (pthread_mutex_t){0};
 		pthread_mutex_init(&(*list)[i], NULL);
 		i++;
 	}
@@ -61,7 +63,7 @@ int	main(int argc, char const *argv[])
 {
 	t_env	env;
 
-	env = (t_env){};
+	env = (t_env){0};
 	ft_putstr_fd("\r", STDOUT_FILENO);
 	if (init_from_params(&env, argc - 1, &argv[1]) != EXIT_SUCCESS)
 		return (-EXIT_FAILURE);

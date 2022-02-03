@@ -59,8 +59,7 @@
 
 # define MAX_ACTIONS		5
 
-static char	*g_actions_string[MAX_ACTIONS] =
-{
+static const char	*g_actions_string[MAX_ACTIONS] = {
 	ACTION_TEXT_FORK, ACTION_TEXT_EAT, ACTION_TEXT_SLEEP,
 	ACTION_TEXT_THINK, ACTION_TEXT_DEAD
 };
@@ -70,7 +69,7 @@ int		ft_isdigit(int c);
 char	*ft_itoa(int n);
 void	*ft_memcpy(void *dst, const void *src, size_t len);
 
-void	ft_putstr_fd(char *s, int fd);
+void	ft_putstr_fd(const char *s, int fd);
 void	ft_putnbr_fd(int n, int fd);
 size_t	ft_strlen(const char *s);
 void	ft_putchar_fd(char c, int fd);
@@ -94,7 +93,7 @@ void	*memset(void *s, int c, size_t n);
 # define MUTEX_G_Q 3
 
 typedef struct s_env {
-	int					params[PARAM_Q];
+	long				params[PARAM_Q];
 	int					stop;
 	pthread_mutex_t		*forks;
 	pthread_mutex_t		*mutex_bank;
@@ -113,9 +112,11 @@ typedef struct s_philo_env {
 	long		last_time[MAX_ACTIONS];
 }	t_philo_env;
 
-int		try_to_pick_up_fork(t_philo_env *p_env, int id);
+int		try_to_pick_up_fork(t_philo_env *p_env);
 long	get_base_timestamp(void);
 long	get_current_timestamp(t_env *env);
+int		get_left_fork_id(int id);
+int		get_right_fork_id(t_env *env, int id);
 
 void	clean_env(t_env *env);
 
@@ -130,7 +131,7 @@ int		get_last_ate(t_env *env, int i);
 int		get_state(t_env *env, int i);
 void	set_state(t_env *env, int i, int state);
 
-int		my_usleep(t_env *env, int delay_in_millis, int max_time_before_death);
+int		my_usleep(t_env *env, int delay_in_millis, long max_time_before_death);
 long	print_action(t_env *env, int id, int action_code);
 
 int		quit(t_env *env, char *message, int exit_code);

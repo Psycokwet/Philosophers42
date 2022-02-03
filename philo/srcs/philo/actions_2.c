@@ -6,7 +6,7 @@
 /*   By: scarboni <scarboni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/22 18:54:29 by scarboni          #+#    #+#             */
-/*   Updated: 2022/01/08 16:39:51 by scarboni         ###   ########.fr       */
+/*   Updated: 2022/01/11 12:06:37 by scarboni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	post_action_sleep(t_philo_env *p_env)
 
 int	pre_action_eat(t_philo_env *p_env)
 {
-	return (try_to_pick_up_fork(p_env, p_env->num));
+	return (try_to_pick_up_fork(p_env));
 }
 
 int	take_first_fork(t_philo_env *p_env)

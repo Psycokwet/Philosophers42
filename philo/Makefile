@@ -10,7 +10,7 @@ OBJ_BONUS_PATH		= bin/bonus/
 MINILIB_PATH		= minilib/
 PHILO_PATH			= philo/
 
-CFLAGS		+=	-W -Wall -Wextra -D BUFFER_SIZE=32 -g3 -pg #-Werror  -pedantic 		## '+=' allow to keep default flags.
+CFLAGS		+=	-W -Wall -Wextra -D BUFFER_SIZE=32 -g3 -pg -Werror  -pedantic 		## '+=' allow to keep default flags.
 
 ifdef WITH_BONUS
 	CFLAGS	+= -DBONUS -DIF_BONUS=true
@@ -47,6 +47,7 @@ PHILO						=	actions_1.c \
 								get_forks.c \
 								main.c \
 								my_usleep.c \
+								philosophes_2.c \
 								philosophes.c \
 								print_action.c \
 								quit_philo.c \

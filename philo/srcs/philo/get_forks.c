@@ -6,13 +6,13 @@
 /*   By: scarboni <scarboni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/05 10:38:18 by scarboni          #+#    #+#             */
-/*   Updated: 2022/01/08 16:27:36 by scarboni         ###   ########.fr       */
+/*   Updated: 2022/01/11 11:42:33 by scarboni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../main.h"
 
-int	try_to_pick_up_fork(t_philo_env *p_env, int id)
+int	try_to_pick_up_fork(t_philo_env *p_env)
 {
 	if (p_env->env->params[NUMBER_OF_PHILOSOPHER] == 1)
 	{

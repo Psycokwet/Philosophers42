@@ -6,13 +6,13 @@
 /*   By: scarboni <scarboni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/05 10:38:18 by scarboni          #+#    #+#             */
-/*   Updated: 2022/01/08 16:45:32 by scarboni         ###   ########.fr       */
+/*   Updated: 2022/01/11 11:45:24 by scarboni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../main.h"
 
-int	ft_putstr_str(char *src, char *dst)
+int	ft_putstr_str(const char *src, char *dst)
 {
 	size_t	len_src;
 

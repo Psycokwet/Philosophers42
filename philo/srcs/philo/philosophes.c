@@ -6,23 +6,11 @@
 /*   By: scarboni <scarboni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/22 18:54:29 by scarboni          #+#    #+#             */
-/*   Updated: 2022/01/08 17:55:32 by scarboni         ###   ########.fr       */
+/*   Updated: 2022/01/11 11:49:43 by scarboni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../main.h"
-
-int	get_left_fork_id(int id)
-{
-	return (id);
-}
-
-int	get_right_fork_id(t_env *env, int id)
-{
-	if (id == 0)
-		return (env->params[NUMBER_OF_PHILOSOPHER] - 1);
-	return (id - 1);
-}
 
 int	start_philo(t_philo_env *phils, int i, t_env *env)
 {
@@ -46,11 +34,57 @@ int	start_philo(t_philo_env *phils, int i, t_env *env)
 	return (EXIT_SUCCESS);
 }
 
+int	start_all_philos(t_philo_env *phils, t_env *env)
+{
+	int	i;
+
+	i = 0;
+	env->started_at = get_base_timestamp();
+	while (i < env->params[NUMBER_OF_PHILOSOPHER])
+	{
+		if (start_philo(phils, i, env) != EXIT_SUCCESS)
+			return (-EXIT_FAILURE);
+		i += 2;
+	}
+	i = 1;
+	while (i < env->params[NUMBER_OF_PHILOSOPHER])
+	{
+		if (start_philo(phils, i, env) != EXIT_SUCCESS)
+			return (-EXIT_FAILURE);
+		i += 2;
+	}
+	return (EXIT_SUCCESS);
+}
+
+int	cleanup_philosophers(int error, t_philo_env *phils, t_env *env)
+{
+	int			i;
+	void		*res;
+
+	i = 0;
+	if (error == -EXIT_FAILURE)
+	{
+		while (i < env->params[NUMBER_OF_PHILOSOPHER])
+		{
+			if (phils[i].th)
+				pthread_detach(phils[i].th);
+			i++;
+		}
+	}
+	else
+	{
+		while (i < env->params[NUMBER_OF_PHILOSOPHER])
+		{
+			pthread_join(phils[i].th, &res);
+			i++;
+		}
+	}
+	return (error);
+}
+
 int	wrap_philosophers(t_env *env)
 {
 	t_philo_env	*phils;
-	int			i;
-	void		*res;
 
 	phils = (t_philo_env *)malloc(sizeof(t_philo_env)
 			* env->params[NUMBER_OF_PHILOSOPHER]);
@@ -60,38 +94,5 @@ int	wrap_philosophers(t_env *env)
 		printf("error malloc\n");
 		return (-EXIT_FAILURE);
 	}
-	i = 0;
-	env->started_at = get_base_timestamp();
-	while (i < env->params[NUMBER_OF_PHILOSOPHER])
-	{
-		start_philo(phils, i, env);
-		i += 2;
-	}
-	i = 1;
-	// usleep(100);
-	while (i < env->params[NUMBER_OF_PHILOSOPHER])
-	{
-		start_philo(phils, i, env);
-		i += 2;
-	}
-	i = 0;
-	while (i < env->params[NUMBER_OF_PHILOSOPHER])
-	{
-		pthread_join(phils[i].th, &res);
-		if (res != EXIT_SUCCESS)
-			printf("PROBLEME\n");
-		else
-			printf("finished %d\n", i);
-		i++;
-	}
-	// i = 0;
-	// while (i < env->params[NUMBER_OF_PHILOSOPHER])
-	// {
-	// 	if (pthread_detach(phils[i].th))
-	// 		printf("thread detachment has failed\n");
-	// 	i++;
-	// }
-	// free(phils);
-	// free(env->forks);
-	return (EXIT_SUCCESS);
+	return (cleanup_philosophers(start_all_philos(phils, env), phils, env));
 }

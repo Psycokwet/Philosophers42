@@ -1,30 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   my_usleep.c                                        :+:      :+:    :+:   */
+/*   philosophes_2.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: scarboni <scarboni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/11/05 10:38:18 by scarboni          #+#    #+#             */
-/*   Updated: 2022/01/11 12:11:01 by scarboni         ###   ########.fr       */
+/*   Created: 2020/10/22 18:54:29 by scarboni          #+#    #+#             */
+/*   Updated: 2022/01/11 11:37:47 by scarboni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../main.h"
 
-int	my_usleep(t_env *env, int delay_in_millis, long max_time_before_death)
+int	get_left_fork_id(int id)
 {
-	long int	start_time;
-	long int	current_time;
+	return (id);
+}
 
-	start_time = get_current_timestamp(env);
-	current_time = get_current_timestamp(env);
-	while ((current_time - start_time) < delay_in_millis)
-	{
-		if (current_time >= max_time_before_death)
-			return (EXIT_FAILURE);
-		usleep(200);
-		current_time = get_current_timestamp(env);
-	}
-	return (EXIT_SUCCESS);
+int	get_right_fork_id(t_env *env, int id)
+{
+	if (id == 0)
+		return (env->params[NUMBER_OF_PHILOSOPHER] - 1);
+	return (id - 1);
 }
